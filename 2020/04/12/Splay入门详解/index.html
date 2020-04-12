@@ -20,30 +20,40 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="你只有十分努力，才能看上去毫不费力">
-<meta property="og:type" content="website">
-<meta property="og:title" content="_Niceの博客">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="普通平衡树（splay）前言 本篇讲解内容转自rtldl的博客，其中添加了些个人理解，希望能帮助你更好的了解Splay。个人认为Splay并没有那么难，跟树剖一样属于虽然码量不小但只要理解了思路就不难实现的一类数据结构，所以当你看到下面的长篇大论时请一定要坚持看下去，你会发现其实每一步都是很好理解的，最后祝你食用愉快！ 基本思想数据结构对于Splay，我定义了一个class类（当成struct就行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Splay入门详解">
+<meta property="og:url" content="http://yoursite.com/2020/04/12/Splay%E5%85%A5%E9%97%A8%E8%AF%A6%E8%A7%A3/index.html">
 <meta property="og:site_name" content="_Niceの博客">
-<meta property="og:description" content="你只有十分努力，才能看上去毫不费力">
+<meta property="og:description" content="普通平衡树（splay）前言 本篇讲解内容转自rtldl的博客，其中添加了些个人理解，希望能帮助你更好的了解Splay。个人认为Splay并没有那么难，跟树剖一样属于虽然码量不小但只要理解了思路就不难实现的一类数据结构，所以当你看到下面的长篇大论时请一定要坚持看下去，你会发现其实每一步都是很好理解的，最后祝你食用愉快！ 基本思想数据结构对于Splay，我定义了一个class类（当成struct就行">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.luogu.com.cn/upload/pic/4409.png">
+<meta property="og:image" content="https://cdn.luogu.com.cn/upload/pic/4410.png">
+<meta property="og:image" content="https://cdn.luogu.com.cn/upload/pic/4411.png">
+<meta property="og:image" content="https://cdn.luogu.com.cn/upload/pic/4412.png">
+<meta property="og:image" content="https://cdn.luogu.com.cn/upload/pic/4413.png">
+<meta property="article:published_time" content="2020-04-12T13:52:30.000Z">
+<meta property="article:modified_time" content="2020-04-12T13:54:21.942Z">
 <meta property="article:author" content="_Nice">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="数据结构">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.luogu.com.cn/upload/pic/4409.png">
 
-<link rel="canonical" href="http://yoursite.com/">
+<link rel="canonical" href="http://yoursite.com/2020/04/12/Splay%E5%85%A5%E9%97%A8%E8%AF%A6%E8%A7%A3/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>_Niceの博客</title>
+  <title>Splay入门详解 | _Niceの博客</title>
   
 
 
@@ -154,10 +164,10 @@
             
 
   <div class="posts-expand">
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/12/Splay%E5%85%A5%E9%97%A8%E8%AF%A6%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -171,8 +181,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/12/Splay%E5%85%A5%E9%97%A8%E8%AF%A6%E8%A7%A3/" class="post-title-link" itemprop="url">Splay入门详解</a>
+          Splay入门详解
         </h1>
 
         <div class="post-meta">
@@ -210,7 +219,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="普通平衡树（splay）"><a href="#普通平衡树（splay）" class="headerlink" title="普通平衡树（splay）"></a>普通平衡树（splay）</h1><p><strong>前言</strong></p>
+        <h1 id="普通平衡树（splay）"><a href="#普通平衡树（splay）" class="headerlink" title="普通平衡树（splay）"></a>普通平衡树（splay）</h1><p><strong>前言</strong></p>
 <p>本篇讲解内容转自<a href="https://www.luogu.com.cn/blog/user19027/solution-p3369" target="_blank" rel="noopener">rtldl的博客</a>，其中添加了些个人理解<br>，希望能帮助你更好的了解Splay。个人认为Splay并没有那么难，跟树剖一样属于虽然码量不小但只要理解了思路就不难实现的一类数据结构<br>，所以当你看到下面的长篇大论时请一定要坚持看下去，你会发现其实每一步都是很好理解的，最后祝你食用愉快！</p>
 <h2 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h2><h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>对于Splay，我定义了一个class类（当成struct就行啦。。。个人习惯不同啦），定义名称为“Splay”。</p>
 <p>之后在类中，我定义了Splay的主体，即数组e。</p>
@@ -636,402 +645,37 @@ int main(){
 }</code></pre><p>最后再奉上一道练习题，这道题也可以当做线段树合并的入门题。</p>
 <p><a href="https://www.luogu.com.cn/problem/P3224" target="_blank" rel="noopener">洛谷p3224永无乡</a></p>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"># 数据结构</a>
+          </div>
 
         
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/05/%E4%B8%BB%E5%B8%AD%E6%A0%91/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="_Nice">
-      <meta itemprop="description" content="你只有十分努力，才能看上去毫不费力">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="_Niceの博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/05/%E4%B8%BB%E5%B8%AD%E6%A0%91/" class="post-title-link" itemprop="url">主席树</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-04-05 16:54:33 / 修改时间：17:10:26" itemprop="dateCreated datePublished" datetime="2020-04-05T16:54:33+08:00">2020-04-05</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BA%BF%E6%AE%B5%E6%A0%91/" itemprop="url" rel="index"><span itemprop="name">线段树</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="可持久化线段树（主席树）"><a href="#可持久化线段树（主席树）" class="headerlink" title="可持久化线段树（主席树）"></a>可持久化线段树（主席树）</h1><h2 id="前置芝士-：-线段树，离散化（部分题目需要）"><a href="#前置芝士-：-线段树，离散化（部分题目需要）" class="headerlink" title="前置芝士   ：  线段树，离散化（部分题目需要）"></a>前置芝士   ：  线段树，离散化（部分题目需要）</h2><blockquote>
-<p><a href="https://www.cnblogs.com/TenosDoIt/p/3453089.html" target="_blank" rel="noopener">如果还不了解线段树可以戳这里</a></p>
-</blockquote>
-<p>主席树是一种以线段树为基础的可以快速查询区间第k小（大）的数据结构，其中可持久化的意思就是对于每次修改，我们都将结果保存下来，然后你可以随时查询修改之前任意一次操作时所对应的线段树，类似于git，可以查看历史版本。为了实现这一功能，容易想到的是暴力建树，即对于每次操作都重新建立一颗线段树，但这样做时间空间肯定会炸的稀里哗啦。于是我们换个角度想，考虑到对于每次修改，实际变动的节点只是少数，如下图：<br><img src="https://cdn.luogu.com.cn/upload/pic/20234.png" alt=""></p>
-<p>假如现在正在进行第x次操作，我们对原序列第四个点进行修改，其中橙色节点是第x-1次操作对应的线段树的节点，而其右边是第x次操作新建立的线段树节点。这里若修改第4个点，则只有橙色的节点维护的信息发生了变动，而其他节点都保持不变，考虑到这一特点，在每次修改后，我们只需要创建与受到影响的节点（橙色节点）相对应的节点（橙色节点右边的节点），然后让他们共用那些没有被影响的节点，这样一来，便可以很快的建好第x次操作所对应的线段树，并且极大节约了空间。（与普通线段树不同的是，节点的左右儿子编号并不能被计算出来，需要另行记录）</p>
-<p>下面我们通过一道例题具体实现下，此题需进行离散化 <a href="https://www.cnblogs.com/lornd/p/11167316.html" target="_blank" rel="noopener">可参考这篇博客的方法二</a></p>
-<blockquote>
-<p><a href="https://www.luogu.com.cn/problem/P3834" target="_blank" rel="noopener">例题 洛谷p3834</a></p>
-</blockquote>
-<p>题意<br>给定 n 个整数构成的序列，将对于指定的闭区间查询其区间内的第 k 小值。</p>
-<p>输入格式<br>第一行包含两个正整数 n,mn,m，分别表示序列的长度和查询的个数。</p>
-<p>第二行包含 nn 个整数，表示这个序列各项的数字。</p>
-<p>接下来 mm 行每行包含三个整数 l, r, kl,r,k , 表示查询区间 [l, r][l,r] 内的第 kk 小值。</p>
-<p>输出格式<br>输出包含 mm 行，每行一个整数，依次表示每一次查询的结果</p>
-<p>数据范围<br>1 &lt;= n,m &lt;= 2*10^5  数列中的所有数绝对值都不超过10^9</p>
-<p>这是一道板子题，我将结合代码用注释解释</p>
-<p><strong>Code</strong></p>
-<pre><code>#include&lt;cstdio&gt;
-#include&lt;algorithm&gt;
-#define maxn 200005
-using std::sort;
-using std::unique;
-using std::lower_bound;
-
-int n,m,cnt,p,k,l,r;
-int cl[maxn&lt;&lt;5],cr[maxn&lt;&lt;5],sum[maxn&lt;&lt;5];
-//cl[i],cr[i],sun[i]分别为i号节点的左孩子序号,右孩子序号,i号节点管理的区间和
-int rt[maxn],a[maxn],b[maxn];
-//rt[i]是第i颗线段树的根节点号码，a,b分别是原数组和其副本
-int change(int u,int l,int r){    //u是与现在访问的节点相对应的上一颗数的节点号码，l,r是该号码所管理的区间
-    int t = ++cnt;    //t是新建立的节点号码
-    cl[t] = cl[u],cr[t] = cr[u],sum[t] = sum[u]+1; //先让t号节点继承上一颗线段树与之对应的节点的信息
-    if(l == r)        //该节点没有孩子了，结束更新
-        return t;
-    int mid = (l+r)&gt;&gt;1;
-    if(p &lt;= mid)    //变动的节点在左子树，递归进入左子树创立新节点
-        cl[t] = change(cl[u],l,mid);
-    else
-        cr[t] = change(cr[u],mid+1,r);
-    return t;    //返回这次创立的节点序号
-}
-
-int query(int fu,int u,int l,int r,int k){    //返回第k小的数离散化后的rank
-    if(l == r)
-        return l;
-    int mid = (l+r)&gt;&gt;1,num = sum[cl[u]]-sum[cl[fu]];    //主席树是可减的，这里实际模拟下就很清楚了
-    if(num &gt;= k)
-        return query(cl[fu],cl[u],l,mid,k);
-    else
-        return query(cr[fu],cr[u],mid+1,r,k-num);
-}
-
-int main(){
-    scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
-    for(int i = 1;i &lt;= n;i++){
-        scanf(&quot;%d&quot;,&amp;a[i]);
-        b[i] = a[i];    //因为要进行离散化，而之后还要用该数组的值，所以创建副本
-    }
-    //   下面是离散化操作
-    sort(b+1,b+1+n);
-    int len = unique(b+1,b+1+n)-b-1;
-    for(int i = 1;i &lt;= n;i++){        //对原数组下标1-i的数建一颗线段树（也就是一个版本），一共会建立n颗线段树
-        p = lower_bound(b+1,b+1+len,a[i])-b;
-        rt[i] = change(rt[i-1],1,len);    //change函数会创建新节点，同时返回新创建的节点标号
-    }
-    while(m--){
-        scanf(&quot;%d%d%d&quot;,&amp;l,&amp;r,&amp;k);
-        int t = query(rt[l-1],rt[r],1,len,k);
-        printf(&quot;%d\n&quot;,b[t]);
-    }
-    return 0;
-}</code></pre><p>下面放两道主席树的其他类型题目<br>洛谷 p3919<br>洛谷 p3402</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
         
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/21/%E7%BD%91%E7%BB%9C%E6%B5%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="_Nice">
-      <meta itemprop="description" content="你只有十分努力，才能看上去毫不费力">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="_Niceの博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/21/%E7%BD%91%E7%BB%9C%E6%B5%81/" class="post-title-link" itemprop="url">网络流</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-21 15:53:38" itemprop="dateCreated datePublished" datetime="2020-03-21T15:53:38+08:00">2020-03-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-26 09:47:40" itemprop="dateModified" datetime="2020-03-26T09:47:40+08:00">2020-03-26</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong><em>以网络流24题为例</em></strong></p>
-<blockquote>
-<p>匹配</p>
-<blockquote>
-<p>二分图匹配<br>    1.匈牙利算法<br>一般图最大匹配<br>    1.带花树算法</p>
-</blockquote>
-</blockquote>
-
-      
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/05/%E4%B8%BB%E5%B8%AD%E6%A0%91/" rel="prev" title="主席树">
+      <i class="fa fa-chevron-left"></i> 主席树
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/21/%E6%89%AB%E6%8F%8F%E7%BA%BF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="_Nice">
-      <meta itemprop="description" content="你只有十分努力，才能看上去毫不费力">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="_Niceの博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/21/%E6%89%AB%E6%8F%8F%E7%BA%BF/" class="post-title-link" itemprop="url">扫描线</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-21 15:47:54" itemprop="dateCreated datePublished" datetime="2020-03-21T15:47:54+08:00">2020-03-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-26 09:46:55" itemprop="dateModified" datetime="2020-03-26T09:46:55+08:00">2020-03-26</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="前置知识：线段树-离散化"><a href="#前置知识：线段树-离散化" class="headerlink" title="前置知识：线段树  离散化"></a><strong>前置知识：线段树  离散化</strong></h2><blockquote>
-<p>123</p>
-<blockquote>
-<p>456</p>
-<ol>
-<li>456</li>
-<li>789</li>
-</ol>
-</blockquote>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/20/Hello-World/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="_Nice">
-      <meta itemprop="description" content="你只有十分努力，才能看上去毫不费力">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="_Niceの博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/20/Hello-World/" class="post-title-link" itemprop="url">Hello World</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-20 15:22:32" itemprop="dateCreated datePublished" datetime="2020-03-20T15:22:32+08:00">2020-03-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-21 16:40:33" itemprop="dateModified" datetime="2020-03-21T16:40:33+08:00">2020-03-21</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong><em>hello people</em></strong></p>
-<blockquote>
-<ul>
-<li>欢迎光临*<blockquote>
-<ul>
-<li>123</li>
-<li>456</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
   </article>
   
   
   
 
   </div>
-
-  
-
 
 
           </div>
@@ -1082,6 +726,7 @@ int main(){
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#普通平衡树（splay）"><span class="nav-number">1.</span> <span class="nav-text">普通平衡树（splay）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本思想"><span class="nav-number">1.1.</span> <span class="nav-text">基本思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据结构"><span class="nav-number">1.2.</span> <span class="nav-text">数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#功能全解"><span class="nav-number">1.3.</span> <span class="nav-text">功能全解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更新当前节点sum值-update"><span class="nav-number">1.4.</span> <span class="nav-text">更新当前节点sum值(update)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取父子关系-identify"><span class="nav-number">1.5.</span> <span class="nav-text">获取父子关系(identify)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建立父子关系-connect"><span class="nav-number">1.6.</span> <span class="nav-text">建立父子关系(connect)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#旋转节点-rotate"><span class="nav-number">1.7.</span> <span class="nav-text">旋转节点(rotate)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#伸展操作-splay"><span class="nav-number">1.8.</span> <span class="nav-text">伸展操作(splay)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加节点-crepoint-和摧毁节点-destroy"><span class="nav-number">1.9.</span> <span class="nav-text">添加节点(crepoint)和摧毁节点(destroy)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查找元素-find"><span class="nav-number">1.10.</span> <span class="nav-text">查找元素(find)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入节点-push"><span class="nav-number">1.11.</span> <span class="nav-text">插入节点(push)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除节点-pop"><span class="nav-number">1.12.</span> <span class="nav-text">删除节点(pop)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取元素的排名（rank）-amp-获取该排名对应的元素值（atrank）"><span class="nav-number">1.13.</span> <span class="nav-text">获取元素的排名（rank）&amp;获取该排名对应的元素值（atrank）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查找前驱（lower）和后继（upper）"><span class="nav-number">1.14.</span> <span class="nav-text">查找前驱（lower）和后继（upper）</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
