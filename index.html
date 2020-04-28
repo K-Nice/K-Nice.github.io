@@ -183,7 +183,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-04-28 15:47:33 / 修改时间：17:10:20" itemprop="dateCreated datePublished" datetime="2020-04-28T15:47:33+08:00">2020-04-28</time>
+              <time title="创建时间：2020-04-28 15:47:33 / 修改时间：17:13:05" itemprop="dateCreated datePublished" datetime="2020-04-28T15:47:33+08:00">2020-04-28</time>
             </span>
 
           
@@ -205,8 +205,21 @@
 <p>数据范围：1&lt;=a,b,c&lt;=1e9  ， 输入含有多组数据，数据组数不超过2*10^5</p>
 <p>样例输入：<br>2<br>2 11 100<br>3 18 6</p>
 <p>样例输出:<br>4 6 2 39 8<br>2 1</p>
-<h2 id="拓展欧几里得算法"><a href="#拓展欧几里得算法" class="headerlink" title="拓展欧几里得算法"></a>拓展欧几里得算法</h2><p>扩展欧几里得算法：用于求解形如ax+by=gcd(a,b)的不定方程特解。<br><strong><em>求解方法&amp;证明：</em></strong> 当b=0时，可以看出gcd(a,b)=a，而x=1,y=0是方程的一组特解<br>当b!=0时，根据欧几里得算法递归求解exgcd(b,a%b,x,y)，设a’=b,b’=a%b,可以求得a’x’+b’y’=gcd(a,b)的一组特解，即x’,y’。<br>而ax+by=gcd(a,b)=a’x’+b’y’,将a’=b,b’=a%b代入，得x=y’,y=x-a/b<em>y’。<br>Code：<br>    int exgcd(int a,int b,int &amp;x,int &amp;y)<br>    {<br>        if(!b)<br>        {<br>            x=1;<br>            y=0;<br>            return a;<br>        }<br>        int k=exgcd(b,a%b,x,y);<br>        int p=x;<br>        x=y;<br>        y=p-(a/b)</em>y;<br>        return k;<br>    }</p>
-<h2 id="求二元一次方程组的特解"><a href="#求二元一次方程组的特解" class="headerlink" title="求二元一次方程组的特解"></a>求二元一次方程组的特解</h2><p>二元一次方程： 对于形如ax+by=c的二元一次方程，裴蜀定理指出，当且仅当gcd(a,b)|c(|为整除)时，存在整数解。由裴蜀定理我们可以得到一个推论：a,b互质的充要条件是存在整数x,y使ax+by=1.<br>设g=gcd(a,b),a’=a/g,b’=b/g,c’=c/g,则ax+by=c⇔a’x+b’y=c’，<br>此时gcd(a’,b’)=1,可以利用exgcd求出a’x’+b’y’=1的一组特解，继而得出x=c’<em>y’, y=c’</em>x’,从而得到ax+by=c的一组特解</p>
+<h2 id="拓展欧几里得算法"><a href="#拓展欧几里得算法" class="headerlink" title="拓展欧几里得算法"></a>拓展欧几里得算法</h2><p>扩展欧几里得算法：用于求解形如ax+by=gcd(a,b)的不定方程特解。<br><strong><em>求解方法&amp;证明：</em></strong> 当b=0时，可以看出gcd(a,b)=a，而x=1,y=0是方程的一组特解<br>当b!=0时，根据欧几里得算法递归求解exgcd(b,a%b,x,y)，设a’=b,b’=a%b,可以求得a’x’+b’y’=gcd(a,b)的一组特解，即x’,y’。<br>而ax+by=gcd(a,b)=a’x’+b’y’,将a’=b,b’=a%b代入，得x=y’,y=x-a/b<em>y’。<br>*</em>Code**</p>
+<pre><code>int exgcd(int a,int b,int &amp;x,int &amp;y)
+    {
+        if(!b)
+        {
+            x=1;
+            y=0;
+            return a;
+        }
+        int k=exgcd(b,a%b,x,y);
+        int p=x;
+        x=y;
+        y=p-(a/b)*y;
+        return k;
+    }</code></pre><h2 id="求二元一次方程组的特解"><a href="#求二元一次方程组的特解" class="headerlink" title="求二元一次方程组的特解"></a>求二元一次方程组的特解</h2><p>二元一次方程： 对于形如ax+by=c的二元一次方程，裴蜀定理指出，当且仅当gcd(a,b)|c(|为整除)时，存在整数解。由裴蜀定理我们可以得到一个推论：a,b互质的充要条件是存在整数x,y使ax+by=1.<br>设g=gcd(a,b),a’=a/g,b’=b/g,c’=c/g,则ax+by=c⇔a’x+b’y=c’，<br>此时gcd(a’,b’)=1,可以利用exgcd求出a’x’+b’y’=1的一组特解，继而得出x=c’<em>y’, y=c’</em>x’,从而得到ax+by=c的一组特解</p>
 <p>线性同余方程： 对于形如ax\equiv≡c(mod b)的线性同余方程，根据模运算的定义，在方程左侧添加一个by不会对结果造成影响，其实质就等价于ax+by=c的不定方程，利用上述方法求解便可。</p>
 <h2 id="求二元一次方程-线性同余方程通解"><a href="#求二元一次方程-线性同余方程通解" class="headerlink" title="求二元一次方程/线性同余方程通解"></a>求二元一次方程/线性同余方程通解</h2><p>设g=gcd(a,b), a’=b/g, b’=a/g， x0,y0为方程的一组特解， 则通解为x=x0+a’t, y=y0-b’t(t为整数)</p>
 <p><strong>证明</strong><br>Q:为什么它是通解？<br>A:因为将该解代入方程恒成立<br>Q:但还有其他形式的解能满足，例如x=x0+b<em>t, y=y0-a</em>t,为什么选他呢?<br>A:因为他能无遗漏地表示所有正整数解，因为lcm(a,b)=ab/g, x,y的系数分别为a,b,所以x,y的在满足方程的前提下的最小变化量为b/g,a/g,证毕。<br><strong>线性同余方程同理</strong></p>
